@@ -8,7 +8,9 @@ import {
   SafeAreaView,
   SectionList,
   Image,
+  TextInput,
   Alert,
+  Button,
   TouchableOpacity,
   TouchableNativeFeedback,
 } from "react-native";
@@ -19,14 +21,24 @@ const Stack = createStackNavigator();
 
 function HomeScreen({ navigation }) {
   return (
-    <SafeAreaView style={styles.item}>
-      <Text style={styles.title}>PHAM THANH HAI</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.item}>
+        <Text style={styles.title}>PHAM THANH HAI</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AcceptOrRejectCall")}
+        >
+          <Image
+            source={require("./assets/download.png")}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      </View>
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate("AcceptOrRejectCall")}
-      >
-        <Image source={require("./assets/download.png")} style={styles.image} />
-      </TouchableOpacity>
+      <Button
+        title="SIGN UP"
+        color="#00ced1"
+        onPress={() => navigation.navigate("SignUp")}
+      />
     </SafeAreaView>
   );
 }
@@ -92,22 +104,95 @@ function CallScreen({ navigation }) {
   );
 }
 
+function makeID() {
+  var text = "";
+  var possibleChar =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+  for (var i = 0; i < 12; i++)
+    text += possibleChar.charAt(
+      Math.floor(Math.random() * possibleChar.length)
+    );
+  return text;
+}
+
+function ProfileScreen({ navigation }) {
+  const [firstName, onChangeFirstName] = React.useState(null);
+  const [lastName, onChangeLastName] = React.useState(null);
+  const [email, onChangeEmail] = React.useState(null);
+  const [number, onChangeNumber] = React.useState(null);
+  const [input, setInput] = React.useState(makeID);
+  return (
+    <SafeAreaView
+      style={{
+        flexDirection: "column",
+        marginVertical: 10,
+        marginHorizontal: 10,
+      }}
+    >
+      <Text style={styles.title}>FIRST NAME</Text>
+      <TextInput
+        style={styles.boxItem}
+        placeholder="Enter Your First Name"
+        underlineColorAndroid="transparent"
+        onChangeText={(text) => onChangeFirstName(text)}
+        value={firstName}
+      />
+
+      <Text style={styles.title}>LAST NAME</Text>
+      <TextInput
+        style={styles.boxItem}
+        placeholder="Enter Your Last Name"
+        underlineColorAndroid="transparent"
+        onChangeText={onChangeLastName}
+        value={lastName}
+      />
+
+      <Text style={styles.title}>TELEPHONE NUMBER</Text>
+      <TextInput
+        style={styles.boxItem}
+        placeholder="Enter Your Telephone Number"
+        underlineColorAndroid="transparent"
+        onChangeText={onChangeNumber}
+        value={number}
+        keyboardType="numeric"
+      />
+
+      <Text style={styles.title}>EMAIL</Text>
+      <TextInput
+        style={styles.boxItem}
+        placeholder="Enter Your Email Address"
+        underlineColorAndroid="transparent"
+        onChangeText={onChangeEmail}
+        value={email}
+        keyboardType="email-address"
+      />
+
+      <Text style={styles.title}>INVITE ID</Text>
+      <TextInput
+        style={styles.boxItem}
+        editable={false}
+        onChangeText={(text) => setInput(text)}
+        value={input}
+      />
+    </SafeAreaView>
+  );
+}
+
 const App = () => (
   <NavigationContainer>
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="AcceptOrRejectCall" component={WaitScreen} />
       <Stack.Screen name="AcceptCall" component={CallScreen} />
+      <Stack.Screen name="SignUp" component={ProfileScreen} />
     </Stack.Navigator>
   </NavigationContainer>
 );
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16,
+    flexDirection: "column",
+    marginHorizontal: 15,
   },
   newstyle: {
     flex: 1,
@@ -119,9 +204,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0ffff",
     paddingTop: StatusBar.currentHeight,
   },
+  boxItem: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    height: 50,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: "darkturquoise",
+    borderRadius: 30,
+    fontSize: 18,
+    paddingLeft: 10,
+  },
   item: {
-    //backgroundColor: "lightblue",
-    padding: 20,
+    padding: 15,
     marginVertical: 8,
     flexDirection: "row",
   },
